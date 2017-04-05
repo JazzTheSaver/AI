@@ -1,0 +1,106 @@
+from random import *
+from matplotlib import pyplot
+
+rand = Random()
+rand.seed(0)
+vari = 0.2
+Step_num = 20
+x1num = 100
+x1 = [rand.normalvariate(2, vari) for i in range(0,x1num)]
+y1 = [rand.normalvariate(2, vari) for i in range(0,x1num)]
+l1 = [0 for i in range(0,x1num)]
+
+x2num = 100
+x2 = [rand.normalvariate(1, vari) for i in range(0,x2num)]
+y2 = [rand.normalvariate(1, vari) for i in range(0,x2num)]
+l2 = [1 for i in range(0,x2num)]
+
+x3num = 100
+x3 = [rand.normalvariate(1, vari) for i in range(0,x3num)]
+y3 = [rand.normalvariate(2, vari) for i in range(0,x3num)]
+l3 = [2 for i in range(0,x3num)]
+
+x = x1 + x2 + x3
+y = y1 + y2 + y3
+label = l1 + l2 +l3
+total = x1num + x2num + x3num
+
+a = [0.1,0.2,0.3]  #初始点/质心点
+b = [1.5,1.6,1.7]
+
+colors = ['red','green','blue', 'yellow']
+demo_colors = ['red','green','blue']
+data_colors = [colors[l] for l in label]
+pyplot.scatter(x, y,color=data_colors, alpha=0.7)
+pyplot.scatter(a, b,color=demo_colors,s=200, alpha=0.7)
+pyplot.show()
+
+
+for step in range(0,Step_num):
+    print("Step",step)
+    redx = []
+    redy = []
+    greenx = []
+    greeny = []
+    bluex = []
+    bluey = []
+    #找到最近的点
+    for i in range (0,total):
+        color = ''
+        dist=[]
+        for j in range (0,3):
+            dist.append((x[i]-a[j])*(x[i]-a[j])+(y[i]-b[j])*(y[i]-b[j]))   
+        dis = min(dist[0],dist[1],dist[2])  
+        for j in range (0,3):
+            if dis == dist[j]:
+                key = j
+        if(key == 0):
+            redx.append(x[i])
+            redy.append(y[i])
+        elif key == 1:
+                greenx.append(x[i])
+                greeny.append(y[i])
+        else:
+                bluex.append(x[i])
+                bluey.append(y[i])
+        color = demo_colors[key]
+    #重新确定质心
+    a =[]
+    b =[]
+    s1x=0
+    s1y=0
+    s2x=0
+    s2y=0
+    s3x=0
+    s3y=0
+    for i in range(len(redx)):
+        s1x+=redx[i]
+        s1y+=redy[i]
+    avg1x = s1x/len(redx)
+    avg1y = s1y/len(redx)
+    
+    for i in range(len(greenx)):
+        s2x+=greenx[i]
+        s2y+=greeny[i]
+    avg2x = s2x/len(greenx)
+    avg2y = s2y/len(greenx)
+
+    for i in range(len(bluex)):
+        s3x+=bluex[i]
+        s3y+=bluey[i]
+    avg3x = s3x/len(bluex)
+    avg3y = s3y/len(bluex)
+
+    a.append(avg1x)
+    b.append(avg1y)
+    a.append(avg2x)
+    b.append(avg2y)
+    a.append(avg3x)
+    b.append(avg3y)
+    pyplot.scatter(a, b,color=demo_colors,s=200, alpha=0.7)
+
+    pyplot.scatter(redx, redy,color='red', alpha=0.7)
+    pyplot.scatter(bluex, bluey,color='blue', alpha=0.7)
+    pyplot.scatter(greenx, greeny,color='green', alpha=0.7)
+
+    pyplot.show()
