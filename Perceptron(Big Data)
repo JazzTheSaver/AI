@@ -1,0 +1,59 @@
+import scipy.stats as stats
+from random import *
+from matplotlib import pyplot
+import math
+import numpy as np
+
+rand = Random()
+rand.seed(0)
+vari = 0.2
+Step_num = 20
+x1num = 100
+x1 = [rand.uniform(1,5) for i in range(0, x1num)]
+y1 = [rand.normalvariate(2, vari) for i in range(0, x1num)]
+l1 = [-1 for i in range(0, x1num)]
+
+x2num = 100
+x2 = [rand.uniform(6,10) for i in range(0, x2num)]
+y2 = [rand.normalvariate(2, vari) for i in range(0, x2num)]
+l2 = [1 for i in range(0, x2num)]
+
+
+x = x1 + x2 
+y = y1 + y2 
+l = l1 + l2
+
+
+
+
+w1 = w2 = b = 0
+alpha = 1
+
+newcolors = []
+for i in range(len(l)):
+    if(l[i] == 1):
+        newcolors.append('red')
+    else:
+        newcolors.append('green')
+        
+pyplot.scatter(x, y, color=newcolors, alpha=0.7)
+pyplot.show()        
+for step in range(1111):
+    print(step)
+    for i in range(len(l)):
+        s = x[i] * w1 + y[i] * w2 + b
+        if(s * l[i] <= 0):
+            w1 += alpha * x[i] * l[i]
+            w2 += alpha * y[i] * l[i]
+            b += alpha * l[i]
+           
+    w = [b, w1, w2]
+    print(w)
+    x1 = np.arange(1, 11, 0.1)
+
+    x2 = -(1 * w[0] + x1 * w[1]) / w[2]
+    pyplot.plot(x1, x2, 'r')
+
+    pyplot.scatter(x, y, color=newcolors, alpha=0.7)
+
+    pyplot.show()
